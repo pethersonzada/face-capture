@@ -61,3 +61,5 @@ Instruções:
     O sistema irá solicitar se você deseja adicionar uma nova pessoa.
     Caso sim, o script capturará 100 imagens do rosto para treinar o modelo LBPH.
     Após o treinamento, o sistema estará pronto para reconhecer rostos em tempo real, exibindo o nome da pessoa ou "Desconhecido".
+
+Após testes, recomendo o uso do código que contenha a biblioteca "Face Recognition", pois acho mais otimizado que a biblioteca "LBPH", já que enquanto a LBPH precisa de muitas fotos para fazer o reconhecimento, a Face Recognition utiliza apenas uma.
