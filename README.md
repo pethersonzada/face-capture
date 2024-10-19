@@ -63,3 +63,5 @@ Instruções:
     Após o treinamento, o sistema estará pronto para reconhecer rostos em tempo real, exibindo o nome da pessoa ou "Desconhecido".
 
 Após testes, recomendo o uso do código que contenha a biblioteca "Face Recognition", pois acho mais otimizado que a biblioteca "LBPH", já que enquanto a LBPH precisa de muitas fotos para fazer o reconhecimento, a Face Recognition utiliza apenas uma.
+
+O código que contem a biblioteca LBPH pode cometer erros, já que ele vai comparar o rosto que aparece no vídeo em tempo real e as imagens que estão na pasta criada pela aplicação, enquanto o Face Recognition tende a ser mais exato, e quando não existe um rosto parecido com o do vídeo em tempo real, ele pode sim colocar o nome de alguém cadastrado nas imagens da pasta "rostos_conhecidos", mas o código está apenas fazendo uma comparação, para ver se realmente se parece. Faça bom uso! :)
