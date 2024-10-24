@@ -68,10 +68,11 @@ O código que utiliza a biblioteca LBPH pode apresentar algumas falhas durante o
 
 Por outro lado, a biblioteca Face Recognition se destaca por sua precisão superior em relação ao LBPH. Mesmo quando ela atribui um nome incorretamente, o que acontece é que o sistema está apenas realizando uma varredura entre todos os rostos armazenados no banco de dados e encontrando a correspondência mais próxima. O Face Recognition nunca faz uma afirmação definitiva de que o rosto detectado é de uma pessoa diferente da realidade. Ele sempre busca a melhor correspondência possível, garantindo uma taxa de erro menor e oferecendo maior confiabilidade nos resultados comparativos, especialmente em comparação com o LBPH.
 
+Para modificar o código, você pode ajustar os parâmetros de detecção de rostos no LBPH ou Face Recognition, melhorar a qualidade das imagens de treinamento, ou adicionar filtros para ignorar sombras e elementos não faciais.
+
+Recomendo o uso do código que contenha o face-recognition, mas fica ao seu critério! Disponibilizo os códigos para você, desenvolvedor, ou apenas alguém que quer entender os códigos e como funciona, aprender o por que o face-recognition pode ser melhor em alguns casos, sinta-se livre para utilizar o código para aprendizado! Caso queira fazer alguma alteração, pode fazer!! Faça bom uso :)
+
 ### Comentário!
 
 Este código foi comentado por mim durante todo o processo de desenvolvimento. Caso algum erro seja encontrado, peço desculpas, pois os comentários refletem apenas minha linha de raciocínio, com o objetivo de tornar o código o mais didático possível.
 
-Para modificar o código, você pode ajustar os parâmetros de detecção de rostos no LBPH ou Face Recognition, melhorar a qualidade das imagens de treinamento, ou adicionar filtros para ignorar sombras e elementos não faciais.
-
-Recomendo o uso do código que contenha o face-recognition, mas fica ao seu critério! Disponibilizo os códigos para você, desenvolvedor, ou apenas alguém que quer entender os códigos e como funciona, aprender o por que o face-recognition pode ser melhor em alguns casos, sinta-se livre para utilizar o código para aprendizado! Caso queira fazer alguma alteração, pode fazer!! Faça bom uso :)
