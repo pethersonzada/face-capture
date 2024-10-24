@@ -62,6 +62,9 @@ Instruções:
     Caso sim, o script capturará 100 imagens do rosto para treinar o modelo LBPH.
     Após o treinamento, o sistema estará pronto para reconhecer rostos em tempo real, exibindo o nome da pessoa ou "Desconhecido".
 
+
+  LBPH vs Face Recognition, qual eu deveria escolher pra usar no meu projeto?
+
 O código que utiliza a biblioteca LBPH pode apresentar algumas falhas durante o processo de captura de imagens. Por exemplo, ao tirar múltiplas fotos, o algoritmo pode interpretar incorretamente uma sombra ou outro artefato visual como um rosto, especialmente em condições de iluminação inadequadas. Isso pode resultar em fotos erradas, registrando elementos que não são, de fato, rostos. Esse tipo de erro é uma limitação do LBPH, principalmente em situações onde o ambiente não é controlado ou onde há interferências visuais.
 
 Por outro lado, a biblioteca Face Recognition se destaca por sua precisão superior em relação ao LBPH. Mesmo quando ela atribui um nome incorretamente, o que acontece é que o sistema está apenas realizando uma varredura entre todos os rostos armazenados no banco de dados e encontrando a correspondência mais próxima. O Face Recognition nunca faz uma afirmação definitiva de que o rosto detectado é de uma pessoa diferente da realidade. Ele sempre busca a melhor correspondência possível, garantindo uma taxa de erro menor e oferecendo maior confiabilidade nos resultados comparativos, especialmente em comparação com o LBPH.
