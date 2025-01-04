@@ -76,3 +76,15 @@ Recomendo o uso do código que contenha o face-recognition, mas fica ao seu crit
 
 Este código foi comentado por mim durante todo o processo de desenvolvimento. Caso algum erro seja encontrado, peço desculpas, pois os comentários refletem apenas minha linha de raciocínio, com o objetivo de tornar o código o mais didático possível.
 
+## Aviso de Direitos Autorais
+
+Este código foi desenvolvido por Miguel Petherson e está protegido por direitos autorais. Ele não possui uma licença aberta, o que significa que:  
+
+- **Você não tem permissão para copiar, modificar ou redistribuir este código sem autorização prévia do autor.**
+- Caso queira usar este código para qualquer finalidade, entre em contato por email - pethersonzada@gmail.com  
+
+Por favor, respeite os direitos autorais e o trabalho investido neste projeto.  
+Agradeço pela compreensão! 😊
+
+
+
