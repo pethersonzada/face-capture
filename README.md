@@ -1,6 +1,6 @@
-# Sistema de Reconhecimento Facial para Controle de Presença Escolar
+# Sistema de Reconhecimento Facial 
 
-Este projeto implementa um sistema de reconhecimento facial nas escolas para substituir o método tradicional de chamada, permitindo um controle automatizado e preciso da presença de alunos. O sistema também otimiza o fluxo de entrada e saída, garantindo maior segurança e eficiência no monitoramento do ambiente escolar. Com a tecnologia, o processo se torna mais rápido, reduzindo falhas humanas e fornecendo registros digitais em tempo real.
+Este projeto implementa um sistema de reconhecimento facial, que inicialmente foi idealizado para funcionar no ambiente escolar, com intuito substituir o método tradicional de chamada, permitindo um controle automatizado e preciso da presença de alunos. O sistema também otimiza o fluxo de entrada e saída, garantindo maior segurança e eficiência no monitoramento do ambiente escolar. Com a tecnologia, o processo se torna mais rápido, reduzindo falhas humanas e fornecendo registros digitais em tempo real.
 
 ## Abordagens Implementadas
 
