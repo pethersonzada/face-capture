@@ -4,7 +4,7 @@ Este projeto implementa um sistema de reconhecimento facial nas escolas para sub
 
 ## Abordagens Implementadas
 
-### 1. Reconhecimento com `face_recognition`
+### 1. Reconhecimento com Face Recognition
 
 - **Biblioteca**: `face_recognition`
 - **Funcionalidades**:
