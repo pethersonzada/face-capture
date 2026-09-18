@@ -1,78 +1,106 @@
-# Sistema de Reconhecimento Facial 
+# Sistema de Reconhecimento Facial - Face Capture
 
-Este projeto implementa um sistema de reconhecimento facial, que inicialmente foi idealizado para funcionar no ambiente escolar, com intuito substituir o método tradicional de chamada, permitindo um controle automatizado e preciso da presença de alunos. O sistema também otimiza o fluxo de entrada e saída, garantindo maior segurança e eficiência no monitoramento do ambiente escolar. Com a tecnologia, o processo se torna mais rápido, reduzindo falhas humanas e fornecendo registros digitais em tempo real.
+<div align="center">
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-red?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
+[![MediaPipe](https://img.shields.io/badge/MediaPipe-Google-orange?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/mediapipe)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Status](https://img.shields.io/badge/Status-Otimizado_%26_Pronto-success?style=for-the-badge)]()
+
+*Um ecossistema completo de visão computacional contendo duas abordagens técnicas (Deep Learning vs. Classificador Clássico) voltado para automação de chamadas, controle de presença e segurança.*
+
+</div>
+
+---
+
+## Sobre o Projeto
+
+Este projeto foi idealizado originalmente para aplicação no **ambiente escolar**, com o propósito de substituir o método tradicional de chamada manual. A tecnologia permite o controle automatizado e preciso de presença de alunos, otimizando o fluxo de entrada e saída, reduzindo falhas humanas e fornecendo registros digitais em tempo real para maior segurança institucional.
+
+O repositório disponibiliza duas soluções técnicas distintas e otimizadas, blindadas contra erros comuns de execução (como falhas de dimensionamento, ausência de rostos nas fotos ou crashes de diretórios vazios).
+
+---
 
 ## Abordagens Implementadas
 
-### 1. Reconhecimento com Face Recognition
+### 1. Abordagem Moderna: `face_recognition` (Recomendada)
+Baseada em aprendizado profundo (*deep learning*), esta abordagem mapeia os traços faciais gerando vetores de características (*embeddings*) altamente precisos.
+* **Funcionalidades**:
+  * Detecção e reconhecimento robusto de rostos em tempo real.
+  * Cadastro interativo de novos usuários via webcam utilizando caixas de diálogo intuitivas (`Tkinter`).
+  * Validação prévia de quadros para evitar o salvamento de imagens corrompidas ou sem rostos.
+  * Alta tolerância a variações de iluminação e ângulos de rotação.
 
-- **Biblioteca**: `face_recognition`
-- **Funcionalidades**:
-  - Detecta e reconhece rostos a partir de imagens ou vídeos.
-  - Permite adicionar novos rostos à base de dados em tempo real, capturando-os pela webcam.
-  - Salva as codificações dos rostos em uma pasta específica para futuras comparações.
-  - Exibe o nome do rosto identificado ou "Desconhecido" se o rosto não for reconhecido.
+### 2. Abordagem Clássica: OpenCV + MediaPipe + LBPH
+Abordagem tradicional baseada em histogramas de texturas locais.
+* **Funcionalidades**:
+  * Detecção de faces de alta performance através do **MediaPipe** (Google).
+  * Rotina automatizada para captura sequencial de 100 imagens de treino por usuário.
+  * Treinamento e salvamento de modelo descritivo utilizando o algoritmo **LBPH** (*Local Binary Patterns Histograms*).
+  * Classificação e identificação em tempo real via matrizes de cinza redimensionadas.
 
-### 2. Reconhecimento com OpenCV, Mediapipe e LBPH
+---
 
-- **Bibliotecas**: `OpenCV`, `Mediapipe`, `LBPH`
-- **Funcionalidades**:
-  - Detecta rostos em imagens capturadas pela webcam utilizando o Mediapipe.
-  - Captura e armazena múltiplas imagens do rosto de cada pessoa para treinamento.
-  - Treina um modelo de reconhecimento facial utilizando o algoritmo LBPH (Local Binary Patterns Histograms).
-  - Permite o reconhecimento em tempo real, exibindo o nome da pessoa ou "Desconhecido".
+## Dependências (`requirements.txt`)
 
-## Bibliotecas Usadas
+Para facilitar a instalação de todas as bibliotecas necessárias de uma só vez, utilize o arquivo `requirements.txt` com o seguinte conteúdo:
 
-- `face_recognition`: Para codificação e comparação de rostos.
-- `opencv-python`: Para captura de vídeo e exibição dos resultados.
-- `numpy`: Para cálculos e manipulação de arrays.
-- `mediapipe`: Para detecção de rostos.
+```text
+face-recognition>=1.3.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+mediapipe>=0.10.0
+```
+---
 
 ## Como Usar
 
-### Script com `face_recognition`
+### 1. Instalação das Dependências
 
-1. **Instale as dependências**:
-   ```
-   pip install face_recognition opencv-python numpy
-   ```
-    Execute o script para iniciar o reconhecimento facial:
+Clone o repositório e instale as dependências executando o comando abaixo:
 
-   ```
-    python codigo-face_recognition.py
-   ```
-    Instruções:
-        Ao iniciar, você pode optar por adicionar um novo rosto, capturando a imagem pela webcam.
-        Pressione 's' para salvar a imagem e insira o nome da pessoa.
-        O sistema irá reconhecer rostos em tempo real, exibindo o nome das pessoas conhecidas ou "Desconhecido" para rostos não reconhecidos.
+```bash
+pip install -r requirements.txt
+```
 
-Script com OpenCV, Mediapipe e LBPH
+> **Nota:** O pacote `face-recognition` depende da biblioteca `dlib`. No sistema operacional Windows, pode ser necessário instalar previamente o **Visual Studio Build Tools**.
 
-   ```
-pip install opencv-python mediapipe numpy
-   ```
-Execute o script para adicionar novas pessoas e treinar o modelo:
+---
 
-   ```
+### 2. Execução do Projeto
+
+Escolha uma das abordagens disponíveis para rodar o sistema:
+
+#### **Opção A: Abordagem Moderna (`face_recognition.py`)**
+
+```bash
+python codigo-face_recognition.py
+```
+* **Como utilizar:** Responda ao diálogo gráfico exibido na tela, pressione a tecla `s` para capturar a imagem do rosto e insira o nome correspondente. O sistema realizará o reconhecimento em tempo real.
+* **Sair:** Pressione a tecla `q`.
+
+#### **Opção B: Abordagem Clássica (`LBPH + MediaPipe`)**
+
+```bash
 python codigo-LBPH.py
-   ```
-Instruções:
-    O sistema irá solicitar se você deseja adicionar uma nova pessoa.
-    Caso sim, o script capturará 100 imagens do rosto para treinar o modelo LBPH.
-    Após o treinamento, o sistema estará pronto para reconhecer rostos em tempo real, exibindo o nome da pessoa ou "Desconhecido".
+```
+* **Como utilizar:** Siga os passos indicados no terminal para cadastrar novas pessoas e efetuar o treinamento do modelo.
+* **Sair:** Pressione a tecla `Esc`.
 
-## LBPH vs Face Recognition, qual eu deveria escolher?
+---
 
-O código que utiliza a biblioteca LBPH pode apresentar algumas falhas durante o processo de captura de imagens. Por exemplo, ao tirar múltiplas fotos, o algoritmo pode interpretar incorretamente uma sombra ou outro artefato visual como um rosto, especialmente em condições de iluminação inadequadas. Isso pode resultar em fotos erradas, registrando elementos que não são, de fato, rostos. Esse tipo de erro é uma limitação do LBPH, principalmente em situações onde o ambiente não é controlado ou onde há interferências visuais.
+## Comparativo: LBPH vs. Face Recognition
 
-Por outro lado, a biblioteca Face Recognition se destaca por sua precisão superior em relação ao LBPH. Mesmo quando ela atribui um nome incorretamente, o que acontece é: o sistema está apenas realizando uma varredura entre todos os rostos armazenados no banco de dados e encontrando a correspondência mais próxima. O Face Recognition nunca faz uma afirmação definitiva de que o rosto detectado é de uma pessoa diferente da realidade. Ele sempre busca a melhor correspondência possível, garantindo uma taxa de erro menor e oferecendo maior confiabilidade nos resultados comparativos, especialmente em comparação com o LBPH.
+| Critério | LBPH (Clássica) | Face Recognition (Moderna) |
+| :--- | :--- | :--- |
+| **Precisão** | Baixa/Média *(sensível a sombras e ruídos no ambiente)*. | Alta *(baseada em redes neurais profundas)*. |
+| **Ambiente** | Exige iluminação e ambiente controlados. | Tolera variações de iluminação e ângulos. |
+| **Erros** | Maior risco de falso positivo *(pode classificar sombras como rostos)*. | Menor taxa de erro *(utiliza cálculo de distância métrica)*. |
 
-Para modificar o código, você pode ajustar os parâmetros de detecção de rostos no LBPH ou Face Recognition, melhorar a qualidade das imagens de treinamento, ou adicionar filtros para ignorar sombras e elementos não faciais.
+---
 
-Recomendo o uso do código que contenha o face-recognition, mas fica ao seu critério! Disponibilizo os códigos para você, desenvolvedor, ou apenas alguém que quer entender os códigos e como funciona, aprender o por que o face-recognition pode ser melhor em alguns casos, sinta-se livre para utilizar o código para aprendizado! Caso queira fazer alguma alteração, pode fazer!! Faça bom uso :)
+## Notas Finais
 
-### Comentário!
-
-Este código foi comentado por mim durante todo o processo de desenvolvimento. Caso algum erro seja encontrado, peço desculpas, pois os comentários refletem apenas minha linha de raciocínio, com o objetivo de tornar o código o mais didático possível.
-
+* **Recomendação:** Dê preferência ao uso do script `face_recognition.py` devido à maior estabilidade e precisão em cenários reais do dia a dia.
+* **Código Educacional:** Sinta-se totalmente livre para modificar, evoluir e adaptar este projeto. Todos os scripts estão comentados linha a linha para facilitar o seu aprendizado e estudo.
