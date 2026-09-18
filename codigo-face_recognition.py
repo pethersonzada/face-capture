@@ -1,9 +1,9 @@
-import cv2
-import face_recognition
 import os
-import tkinter as tk
-from tkinter import simpledialog
+import cv2
 import numpy as np
+import face_recognition
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
 # Função para garantir que uma pasta exista
 def criar_pasta(pasta):
@@ -11,97 +11,156 @@ def criar_pasta(pasta):
         os.makedirs(pasta)
 
 # Criar pastas necessárias
-pasta_rostos_conhecidos = "Projeto/rostos_conhecidos"
-criar_pasta(pasta_rostos_conhecidos)
+PASTA_ROSTOS = "Projeto/rostos_conhecidos"
+criar_pasta(PASTA_ROSTOS)
 
-# Função para salvar um rosto da câmera como conhecido
+def obter_nome_usuario():
+    """Abre uma caixa de diálogo segura do Tkinter para recolher o nome."""
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes('-topmost', True) # Garante que a janela abre em primeiro plano
+    nome = simpledialog.askstring("Cadastro", "Digite o nome do novo rosto:")
+    root.destroy()
+    return nome
+
 def salvar_novo_rosto():
     cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Erro: Não foi possível aceder à webcam para captura.")
+        return
+
+    print("\nPressione 's' para capturar o rosto ou 'q' para cancelar.")
     
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("Erro ao capturar o vídeo. Tente novamente.")
+            print("Erro ao capturar o vídeo.")
             break
 
-        cv2.imshow("Captura de Novo Rosto - Pressione 's' para salvar", frame)
+        cv2.imshow("Cadastro - Pressione 's' para salvar", frame)
+        tecla = cv2.waitKey(1) & 0xFF
 
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            root = tk.Tk()
-            root.withdraw()
-            nome_rosto = simpledialog.askstring("Input", "Digite o nome do novo rosto:")
+        if tecla == ord('s'):
+            # Validação prévia: Verifica se existe pelo menos um rosto no frame antes de salvar
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            locais = face_recognition.face_locations(rgb_frame)
             
-            if nome_rosto:
-                caminho_rosto = os.path.join(pasta_rostos_conhecidos, f"{nome_rosto}.jpg")
-                imagem_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                cv2.imwrite(caminho_rosto, cv2.cvtColor(imagem_rgb, cv2.COLOR_RGB2BGR))
+            if not locais:
+                print("Nenhum rosto detetado! Posicione-se melhor em frente à câmara.")
+                continue
 
-                print(f"Rosto salvo como {nome_rosto}.jpg")
+            nome_rosto = obter_nome_usuario()
+            
+            if nome_rosto and nome_rosto.strip():
+                nome_limpo = nome_rosto.strip()
+                caminho_rosto = os.path.join(PASTA_ROSTOS, f"{nome_limpo}.jpg")
+                cv2.imwrite(caminho_rosto, frame)
+                print(f"Sucesso: Rosto guardado como '{nome_limpo}.jpg'.")
+                break
+            else:
+                print("Operação cancelada: Nome inválido.")
 
+        elif tecla == ord('q'):
+            print("Captura cancelada pelo utilizador.")
             break
 
     cap.release()
     cv2.destroyAllWindows()
 
-# Inicialize o Tkinter para mostrar a janela de diálogo
-root = tk.Tk()
-root.withdraw()
+def carregar_rostos_conhecidos(pasta):
+    """Carrega as codificações validando a presença de rostos para evitar crashes."""
+    codificacoes = []
+    nomes = []
 
-# Perguntar ao usuário se deseja salvar um novo rosto
-resposta = simpledialog.askstring("Input", "Deseja salvar um novo rosto? (sim/não)")
+    if not os.path.exists(pasta):
+        return codificacoes, nomes
 
-if resposta and resposta.lower() == "sim":
-    salvar_novo_rosto()
+    for nome_arquivo in os.listdir(pasta):
+        if not nome_arquivo.lower().endswith(('.jpg', '.jpeg', '.png')):
+            continue
+            
+        caminho_imagem = os.path.join(pasta, nome_arquivo)
+        
+        try:
+            imagem = face_recognition.load_image_file(caminho_imagem)
+            encodings = face_recognition.face_encodings(imagem)
+            
+            if encodings:
+                codificacoes.append(encodings[0])
+                nomes.append(os.path.splitext(nome_arquivo)[0])
+            else:
+                print(f"Aviso: A imagem '{nome_arquivo}' foi ignorada por não conter rostos detetáveis.")
+        except Exception as e:
+            print(f"Erro ao processar o ficheiro {nome_arquivo}: {e}")
 
-# Inicialize a captura da webcam
-cap = cv2.VideoCapture(0)
+    return codificacoes, nomes
 
-# Lista para codificações de rostos conhecidos e seus nomes
-codificacoes_rostos_conhecidos = []
-nomes_rostos_conhecidos = []
+def main():
+    # Pergunta inicial ao utilizador
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes('-topmost', True)
+    resposta = messagebox.askquestion("Sistema", "Deseja cadastrar um novo rosto?")
+    root.destroy()
 
-# Carregar rostos conhecidos de um diretório de imagens
-for nome_arquivo in os.listdir(pasta_rostos_conhecidos):
-    caminho_imagem = os.path.join(pasta_rostos_conhecidos, nome_arquivo)
-    imagem = face_recognition.load_image_file(caminho_imagem)
-    codificacoes_rostos_conhecidos.append(face_recognition.face_encodings(imagem)[0])
-    nomes_rostos_conhecidos.append(os.path.splitext(nome_arquivo)[0])
+    if resposta == 'yes':
+        salvar_novo_rosto()
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("Erro ao capturar o vídeo. Tente novamente.")
-        break
+    # Carrega base de dados facial
+    print("A carregar rostos conhecidos...")
+    codificacoes_rostos_conhecidos, nomes_rostos_conhecidos = carregar_rostos_conhecidos(PASTA_ROSTOS)
+    print(f"{len(nomes_rostos_conhecidos)} identidade(s) carregada(s) com sucesso.")
 
-    pequeno_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-    frame_rgb_pequeno = cv2.cvtColor(pequeno_frame, cv2.COLOR_BGR2RGB)
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Erro: Não foi possível abrir a webcam.")
+        return
 
-    locais_rostos = face_recognition.face_locations(frame_rgb_pequeno)
-    codificacoes_rostos = face_recognition.face_encodings(frame_rgb_pequeno, locais_rostos)
+    print("\nIniciando reconhecimento em tempo real. Pressione 'q' para sair.")
 
-    for codificacao_rosto, local_rosto in zip(codificacoes_rostos, locais_rostos):
-        correspondencias = face_recognition.compare_faces(codificacoes_rostos_conhecidos, codificacao_rosto)
-        nome = "Desconhecido"
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Erro ao capturar o frame da câmara.")
+            break
 
-        distancias_rostos = face_recognition.face_distance(codificacoes_rostos_conhecidos, codificacao_rosto)
-        indice_melhor_correspondencia = np.argmin(distancias_rostos)
+        # Redimensiona para acelerar o processamento da rede neural (escala 0.25)
+        pequeno_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        frame_rgb_pequeno = cv2.cvtColor(pequeno_frame, cv2.COLOR_BGR2RGB)
 
-        if correspondencias[indice_melhor_correspondencia]:
-            nome = nomes_rostos_conhecidos[indice_melhor_correspondencia]
+        locais_rostos = face_recognition.face_locations(frame_rgb_pequeno)
+        
+        # Só calcula encodings se houver rostos detetados no frame
+        if locais_rostos:
+            codificacoes_rostos = face_recognition.face_encodings(frame_rgb_pequeno, locais_rostos)
 
-        topo, direita, baixo, esquerda = local_rosto
-        topo *= 4
-        direita *= 4
-        baixo *= 4
-        esquerda *= 4
+            for codificacao_rosto, local_rosto in zip(codificacoes_rostos, locais_rostos):
+                nome = "Desconhecido"
+                cor = (0, 0, 255) # Vermelho para desconhecido por defeito
 
-        cv2.rectangle(frame, (esquerda, topo), (direita, baixo), (0, 255, 0), 2)
-        cv2.putText(frame, nome, (esquerda, baixo + 25), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 255, 0), 1)
+                if codificacoes_rostos_conhecidos:
+                    distancias_rostos = face_recognition.face_distance(codificacoes_rostos_conhecidos, codificacao_rosto)
+                    indice_melhor_correspondencia = np.argmin(distancias_rostos)
+                    
+                    # Limiar de tolerância padrão (0.6). Quanto menor, mais restrito e seguro.
+                    if distancias_rostos[indice_melhor_correspondencia] < 0.55:
+                        nome = nomes_rostos_conhecidos[indice_melhor_correspondencia]
+                        cor = (0, 255, 0) # Verde para reconhecido
 
-    cv2.imshow('Reconhecimento Facial', frame)
+                # Ajusta as coordenadas para o tamanho original da imagem (multiplica por 4)
+                topo, direita, baixo, esquerda = [v * 4 for v in local_rosto]
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+                # Desenha o retângulo e o nome no frame original
+                cv2.rectangle(frame, (esquerda, topo), (direita, baixo), cor, 2)
+                cv2.putText(frame, nome, (esquerda, topo - 10), cv2.FONT_HERSHEY_DUPLEX, 0.8, cor, 2)
 
-cap.release()
-cv2.destroyAllWindows()
+        cv2.imshow('Reconhecimento Facial', frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
